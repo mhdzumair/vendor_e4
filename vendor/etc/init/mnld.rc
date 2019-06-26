@@ -1,4 +1,3 @@
-# GPS
 service mnld /vendor/bin/mnld
     class main
     user gps

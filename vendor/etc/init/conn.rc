@@ -1,10 +1,25 @@
 service wmt_loader /vendor/bin/wmt_loader
     class core
-    user root
-    group root
+    user system
+    group root system wifi
     oneshot
 
-service wmt_launcher /vendor/bin/wmt_launcher -p /vendor/firmware/
+service wifi2agps /vendor/bin/wifi2agps
+    class main
+    user wifi
+    group gps inet
+
+on property:wlan.driver.status=ok
+    write /dev/wmtWifi "1"
+
+on property:wlan.driver.status=unloaded
+    write /dev/wmtWifi "0"
+    
+service netdiag /vendor/bin/netdiag
+    class main
+    socket netdiag stream 0664 root inet
+
+service conn_launcher /vendor/bin/6620_launcher -p /vendor/firmware/
     user system
     group system
     class core
